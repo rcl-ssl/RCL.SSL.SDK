@@ -53,7 +53,7 @@ namespace RCL.SSL.SDK.Test
             try
             {
                 List<Certificate> certificates = await _certificateRequestService.GetCertificatesToRenewAsync();
-                Assert.AreNotEqual(0, certificates.Count);
+                Assert.AreNotEqual(0, certificates?.Count);
             }
             catch (Exception ex)
             {
