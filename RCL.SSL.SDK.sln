@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCL.SSL.SDK", "src\RCL.SSL.SDK.csproj", "{AA332C18-1E5D-437C-A739-094BA7B07498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCL.SSL.SDK.Test", "test\RCL.SSL.SDK.Test\RCL.SSL.SDK.Test.csproj", "{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA332C18-1E5D-437C-A739-094BA7B07498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA332C18-1E5D-437C-A739-094BA7B07498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA332C18-1E5D-437C-A739-094BA7B07498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA332C18-1E5D-437C-A739-094BA7B07498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64F7275B-243B-4D9C-B6FC-073EBC78BFE0}
+	EndGlobalSection
+EndGlobal
