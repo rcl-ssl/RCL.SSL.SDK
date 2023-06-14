@@ -22,10 +22,21 @@ namespace RCL.SSL.SDK
 
         public async Task<AuthToken> GetAuthTokenAsync(string resource)
         {
-            AuthToken authToken = new AuthToken();
-
             try
             {
+                if(string.IsNullOrEmpty(_authOptions?.Value?.ClientId ?? string.Empty))
+                {
+                    throw new Exception("Client Id is null or empty, cannot generate access token");
+                }
+                if (string.IsNullOrEmpty(_authOptions?.Value?.ClientSecret ?? string.Empty))
+                {
+                    throw new Exception("Client Secret is null or empty, cannot generate access token");
+                }
+                if (string.IsNullOrEmpty(_authOptions?.Value?.TenantId ?? string.Empty))
+                {
+                    throw new Exception("Tenant Id is null or empty, cannot generate access token");
+                }
+
                 var formcontent = new List<KeyValuePair<string, string>>();
                 formcontent.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
                 formcontent.Add(new KeyValuePair<string, string>("client_id", _authOptions.Value.ClientId));
@@ -42,7 +53,8 @@ namespace RCL.SSL.SDK
 
                 if (response.IsSuccessStatusCode)
                 {
-                    authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
+                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
+                    return authToken;
                 }
                 else
                 {
@@ -53,8 +65,6 @@ namespace RCL.SSL.SDK
             {
                 throw new Exception($"Access Token Error : {ex.Message}");
             }
-
-            return authToken;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace RCL.SSL.SDK
         private readonly IAuthTokenService _authTokenService;
 
         public CertificateRequestService(IAuthTokenService authTokenService,
-            IOptions<RCLSDKOptions> options) 
+            IOptions<RCLSDKOptions> options)
             : base(options)
         {
             _authTokenService = authTokenService;
@@ -19,37 +19,23 @@ namespace RCL.SSL.SDK
         {
             try
             {
-                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-
-                ResourceRequest resourceRequest = new ResourceRequest
-                {
-                    accessToken = accessToken
-                };
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
 
                 string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/test";
 
                 await TestAsync<ResourceRequest>(uri, resourceRequest);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
         public async Task<Certificate> GetCertificateAsync(Certificate certificate)
         {
             try
             {
-                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-                string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-                CertificateRequest certificateRequest = new CertificateRequest
-                {
-                    accessToken = accessToken,
-                    accessTokenKeyVault = accessTokenKeyVault,
-                    certificate = certificate
-                };
+                CertificateRequest certificateRequest = await GetCertificateRequestAsync(certificate);
 
                 string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate";
 
@@ -57,7 +43,7 @@ namespace RCL.SSL.SDK
 
                 return _certificate;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -67,14 +53,7 @@ namespace RCL.SSL.SDK
         {
             try
             {
-                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-                string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-                ResourceRequest resourceRequest = new ResourceRequest
-                {
-                    accessToken = accessToken,
-                    accessTokenKeyVault = accessTokenKeyVault,
-                };
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
 
                 string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew/getlist";
 
@@ -82,7 +61,7 @@ namespace RCL.SSL.SDK
 
                 return certificates;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -92,25 +71,16 @@ namespace RCL.SSL.SDK
         {
             try
             {
-                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-                string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-                CertificateRequest certificateRequest = new CertificateRequest
-                {
-                    accessToken = accessToken,
-                    accessTokenKeyVault = accessTokenKeyVault,
-                    certificate = certificate
-                };
+                CertificateRequest certificateRequest = await GetCertificateRequestAsync(certificate);
 
                 string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew";
 
                 await PostAsync<CertificateRequest>(uri, certificateRequest);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
         private async Task<string> GetAccessToken(string resource)
@@ -120,9 +90,56 @@ namespace RCL.SSL.SDK
                 AuthToken authToken = await _authTokenService.GetAuthTokenAsync(resource);
                 return authToken.access_token;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        private async Task<ResourceRequest> GetResourceRequestAsync()
+        {
+            try
+            {
+                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
+                string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
+
+                if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(accessTokenKeyVault))
+                {
+                    throw new Exception("Cannot get an access token");
+                }
+
+                ResourceRequest resourceRequest = new ResourceRequest
+                {
+                    accessToken = accessToken,
+                    accessTokenKeyVault = accessTokenKeyVault,
+                };
+
+                return resourceRequest;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not get Resource Request, {ex.Message}");
+            }
+        }
+
+        private async Task<CertificateRequest> GetCertificateRequestAsync(Certificate certificate)
+        {
+            try
+            {
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
+
+                CertificateRequest certificateRequest = new CertificateRequest
+                {
+                    accessToken = resourceRequest.accessToken,
+                    accessTokenKeyVault = resourceRequest.accessTokenKeyVault,
+                    certificate = certificate
+                };
+
+                return certificateRequest;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not get Certificate Request, {ex.Message}");
             }
         }
     }
