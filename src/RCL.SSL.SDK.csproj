@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>RCL SSL SDK</Title>
-    <Version>7.0.0-alpha</Version>
+    <Version>7.0.0-alpha-3</Version>
     <Authors>Ray Consulting Limited</Authors>
     <Company>Ray Consulting Limited</Company>
     <Description>A C# client library to renew SSL/TLS certificates created in the RCL SSL portal. </Description>
