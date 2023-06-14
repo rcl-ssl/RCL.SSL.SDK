@@ -4,7 +4,7 @@ namespace RCL.SSL.SDK
 {
     public class RCLSDKOptions
     {
-        public const string Options = "RCLSDK";
+        public const string RCLSDK = "RCLSDK";
 
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
