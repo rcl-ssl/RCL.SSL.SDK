@@ -1,7 +1,5 @@
 ﻿#nullable disable
 
-using Newtonsoft.Json;
-
 namespace RCL.SSL.SDK
 {
     public class AuthToken
@@ -12,10 +10,5 @@ namespace RCL.SSL.SDK
         public string expires_on { get; set; }
         public string not_before { get; set; }
         public string resource { get; set; }
-
-        [JsonConstructor]
-        public AuthToken()
-        {
-        }
     }
 }

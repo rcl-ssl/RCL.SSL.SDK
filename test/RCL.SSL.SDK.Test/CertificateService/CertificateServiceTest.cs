@@ -34,7 +34,7 @@ namespace RCL.SSL.SDK.Test
             {
                 Certificate certificate = new Certificate
                 {
-                    certificateName = "store.shopeneur.com"
+                    certificateName = "shopeneur.com"
                 };
 
                 Certificate _certificate = await _certificateRequestService.GetCertificateAsync(certificate);

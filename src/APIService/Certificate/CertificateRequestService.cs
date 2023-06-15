@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace RCL.SSL.SDK
 {
-    internal class CertificateRequestService : ApiRequestBase, ICertificateRequestService
+    public class CertificateRequestService : ApiRequestBase, ICertificateRequestService
     {
         private readonly IAuthTokenService _authTokenService;
 

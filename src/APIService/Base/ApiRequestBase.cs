@@ -1,12 +1,12 @@
 ﻿# nullable disable
 
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System.Text;
+using System.Text.Json;
 
 namespace RCL.SSL.SDK
 {
-    internal abstract class ApiRequestBase
+    public abstract class ApiRequestBase
     {
         protected readonly IOptions<RCLSDKOptions> _options;
         private static readonly HttpClient _client;
@@ -28,7 +28,7 @@ namespace RCL.SSL.SDK
             {
                 SetClientHeaders();
                 var response = await _client.PostAsync($"{_options.Value.ApiBaseUrl}/{uri}",
-                     new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
+                     new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
 
                 string content = ResolveContent(await response.Content.ReadAsStringAsync());
 
@@ -55,13 +55,13 @@ namespace RCL.SSL.SDK
             {
                 SetClientHeaders();
                 var response = await _client.PostAsync($"{_options.Value.ApiBaseUrl}/{uri}",
-                     new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
+                     new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
 
                 string content = ResolveContent(await response.Content.ReadAsStringAsync());
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TResult obj = JsonConvert.DeserializeObject<TResult>(content);
+                    TResult obj = JsonSerializer.Deserialize<TResult>(content);
                     return obj;
                 }
                 else
@@ -82,7 +82,7 @@ namespace RCL.SSL.SDK
             {
                 SetClientHeaders();
                 var response = await _client.PostAsync($"{_options.Value.ApiBaseUrl}/{uri}",
-                     new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"));
+                     new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
 
                 string content = ResolveContent(await response.Content.ReadAsStringAsync());
 

@@ -1,11 +1,11 @@
 ﻿#nullable disable
 
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace RCL.SSL.SDK
 {
-    internal class AuthTokenService : IAuthTokenService
+    public class AuthTokenService : IAuthTokenService
     {
         private readonly IOptions<RCLSDKOptions> _authOptions;
         private static readonly HttpClient _httpClient;
@@ -30,7 +30,7 @@ namespace RCL.SSL.SDK
 
                 if (response.IsSuccessStatusCode)
                 {
-                    AuthToken authToken = JsonConvert.DeserializeObject<AuthToken>(jstr);
+                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
                     return authToken;
                 }
                 else
