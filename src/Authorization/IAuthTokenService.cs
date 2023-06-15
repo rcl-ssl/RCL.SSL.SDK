@@ -1,8 +1,7 @@
 ﻿namespace RCL.SSL.SDK
 {
-    public interface IAuthTokenService
+    internal interface IAuthTokenService
     {
         Task<AuthToken> GetAuthTokenAsync(string resource);
-        Task<string> GetAuthTokenRawResponseAsync(string resource);
     }
 }

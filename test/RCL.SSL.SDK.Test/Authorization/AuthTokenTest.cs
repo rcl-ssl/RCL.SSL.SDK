@@ -42,20 +42,5 @@ namespace RCL.SSL.SDK.Test
                 Assert.Fail();
             }
         }
-
-        [TestMethod]
-        public async Task GetRawResponseTest()
-        {
-            try
-            {
-                string response = await _authTokenService.GetAuthTokenRawResponseAsync(Constants.AzureResourceManagerResource);
-                Assert.AreNotEqual(string.Empty, response);
-            }
-            catch (Exception ex)
-            {
-                string err = ex.Message;
-                Assert.Fail();
-            }
-        }
     }
 }

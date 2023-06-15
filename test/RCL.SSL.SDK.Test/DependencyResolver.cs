@@ -13,8 +13,7 @@ namespace RCL.SSL.SDK.Test
 
             IServiceCollection services = new ServiceCollection();
 
-            services.Configure<RCLSDKOptions>(configuration.GetSection(RCLSDKOptions.RCLSDK));
-            services.AddRCLSDKService();
+            services.AddRCLSDKService(options => configuration.Bind(RCLSDKOptions.RCLSDK,options));
 
             return services.BuildServiceProvider();
         }

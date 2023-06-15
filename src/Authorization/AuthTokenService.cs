@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace RCL.SSL.SDK
 {
-    public class AuthTokenService : IAuthTokenService
+    internal class AuthTokenService : IAuthTokenService
     {
         private readonly IOptions<RCLSDKOptions> _authOptions;
         private static readonly HttpClient _httpClient;
@@ -24,57 +24,17 @@ namespace RCL.SSL.SDK
         {
             try
             {
-                var response = await GetResponseMessageAsync(resource);
-
-                string jstr = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
-                    return authToken;
-                }
-                else
-                {
-                    throw new Exception($"Could not obtain Access Token. {jstr}");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Access Token Error : {ex.Message}");
-            }
-        }
-
-        public async Task<string> GetAuthTokenRawResponseAsync(string resource)
-        {
-            try
-            {
-                var response = await GetResponseMessageAsync(resource);
-
-                string jstr = await response.Content.ReadAsStringAsync();
-
-                return jstr;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Access Token Error : {ex.Message}");
-            }
-        }
-
-        private async Task<HttpResponseMessage> GetResponseMessageAsync(string resource)
-        {
-            try
-            {
                 if (string.IsNullOrEmpty(_authOptions?.Value?.ClientId ?? string.Empty))
                 {
-                    throw new Exception("Client Id is null or empty, cannot generate access token");
+                    throw new Exception($"ERROR from {this.GetType().Name}  : Client Id is null or empty, cannot generate access token");
                 }
                 if (string.IsNullOrEmpty(_authOptions?.Value?.ClientSecret ?? string.Empty))
                 {
-                    throw new Exception("Client Secret is null or empty, cannot generate access token");
+                    throw new Exception($"ERROR from {this.GetType().Name} : Client Secret is null or empty, cannot generate access token");
                 }
                 if (string.IsNullOrEmpty(_authOptions?.Value?.TenantId ?? string.Empty))
                 {
-                    throw new Exception("Tenant Id is null or empty, cannot generate access token");
+                    throw new Exception($"ERROR from {this.GetType().Name} : Tenant Id is null or empty, cannot generate access token");
                 }
 
                 var formcontent = new List<KeyValuePair<string, string>>();
@@ -89,12 +49,21 @@ namespace RCL.SSL.SDK
 
                 var response = await _httpClient.SendAsync(request);
 
-                return response;
-              
+                string jstr = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
+                    return authToken;
+                }
+                else
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name} : Could not obtain Access Token. {jstr}");
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Access Token Error : {ex.Message}");
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
     }

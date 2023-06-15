@@ -2,7 +2,7 @@
 
 namespace RCL.SSL.SDK
 {
-    public class AuthToken
+    internal class AuthToken
     {
         public string access_token { get; set; }
         public string token_type { get; set; }

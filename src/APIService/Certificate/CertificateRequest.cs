@@ -2,7 +2,7 @@
 
 namespace RCL.SSL.SDK
 {
-    public class CertificateRequest : ResourceRequest
+    internal class CertificateRequest : ResourceRequest
     {
         public Certificate certificate { get; set; }
     }

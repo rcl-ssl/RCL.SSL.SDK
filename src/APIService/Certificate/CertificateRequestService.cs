@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace RCL.SSL.SDK
 {
-    public class CertificateRequestService : ApiRequestBase, ICertificateRequestService
+    internal class CertificateRequestService : ApiRequestBase, ICertificateRequestService
     {
         private readonly IAuthTokenService _authTokenService;
 
@@ -27,7 +27,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -45,7 +45,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -63,7 +63,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -79,7 +79,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -92,7 +92,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -105,7 +105,7 @@ namespace RCL.SSL.SDK
 
                 if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(accessTokenKeyVault))
                 {
-                    throw new Exception("Cannot get an access token");
+                    throw new Exception($"ERROR from {this.GetType().Name} : Cannot get an access token");
                 }
 
                 ResourceRequest resourceRequest = new ResourceRequest
@@ -118,7 +118,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not get Resource Request, {ex.Message}");
+                throw new Exception($"ERROR from {this.GetType().Name} : Could not get Resource Request, {ex.Message}");
             }
         }
 
@@ -139,7 +139,7 @@ namespace RCL.SSL.SDK
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not get Certificate Request, {ex.Message}");
+                throw new Exception($"ERROR from {this.GetType().Name} : Could not get Certificate Request, {ex.Message}");
             }
         }
     }
