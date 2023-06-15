@@ -1,13 +1,11 @@
 ﻿#nullable disable
 
+using Newtonsoft.Json;
+
 namespace RCL.SSL.SDK
 {
     public class Certificate 
     {
-        public Certificate()
-        {
-        }
-
         public string certificateName { get; set; }
         public string rootDomain { get; set; }
         public string email { get; set; }
@@ -27,14 +25,15 @@ namespace RCL.SSL.SDK
         public string keyVaultName { get; set; }
         public string keyVaultCertificateName { get; set; }
         public int siteId { get; set; }
+
+        [JsonConstructor]
+        public Certificate()
+        {
+        }
     }
 
     public class CertificateDownloadUrl
     {
-        public CertificateDownloadUrl()
-        {
-        }
-
         public string pemUrl { get; set; }
         public string pfxUrl { get; set; }
         public string cerUrl { get; set; }
@@ -45,5 +44,10 @@ namespace RCL.SSL.SDK
         public string certCrtUrl { get; set; }
         public string cabundleCrtUrl { get; set; }
         public string fullchainCrtUrl { get; set; }
+
+        [JsonConstructor]
+        public CertificateDownloadUrl()
+        {
+        }
     }
 }

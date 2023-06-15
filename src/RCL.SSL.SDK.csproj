@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>RCL SSL SDK</Title>
-    <Version>7.0.0-alpha-3</Version>
+    <Version>7.0.0-alpha-5</Version>
     <Authors>Ray Consulting Limited</Authors>
     <Company>Ray Consulting Limited</Company>
     <Description>A C# client library to renew SSL/TLS certificates created in the RCL SSL portal. </Description>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

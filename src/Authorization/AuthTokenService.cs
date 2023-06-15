@@ -1,7 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.Extensions.Options;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace RCL.SSL.SDK
 {
@@ -24,7 +24,47 @@ namespace RCL.SSL.SDK
         {
             try
             {
-                if(string.IsNullOrEmpty(_authOptions?.Value?.ClientId ?? string.Empty))
+                var response = await GetResponseMessageAsync(resource);
+
+                string jstr = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    AuthToken authToken = JsonConvert.DeserializeObject<AuthToken>(jstr);
+                    return authToken;
+                }
+                else
+                {
+                    throw new Exception($"Could not obtain Access Token. {jstr}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Access Token Error : {ex.Message}");
+            }
+        }
+
+        public async Task<string> GetAuthTokenRawResponseAsync(string resource)
+        {
+            try
+            {
+                var response = await GetResponseMessageAsync(resource);
+
+                string jstr = await response.Content.ReadAsStringAsync();
+
+                return jstr;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Access Token Error : {ex.Message}");
+            }
+        }
+
+        private async Task<HttpResponseMessage> GetResponseMessageAsync(string resource)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_authOptions?.Value?.ClientId ?? string.Empty))
                 {
                     throw new Exception("Client Id is null or empty, cannot generate access token");
                 }
@@ -49,17 +89,8 @@ namespace RCL.SSL.SDK
 
                 var response = await _httpClient.SendAsync(request);
 
-                string jstr = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
-                    return authToken;
-                }
-                else
-                {
-                    throw new Exception($"Could not obtain Access Token. {jstr}");
-                }
+                return response;
+              
             }
             catch (Exception ex)
             {
