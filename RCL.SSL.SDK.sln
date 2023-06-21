@@ -5,7 +5,12 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCL.SSL.SDK", "src\RCL.SSL.SDK.csproj", "{AA332C18-1E5D-437C-A739-094BA7B07498}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCL.SSL.SDK.Test", "test\RCL.SSL.SDK.Test\RCL.SSL.SDK.Test.csproj", "{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RCL.SSL.SDK.Test", "test\RCL.SSL.SDK.Test\RCL.SSL.SDK.Test.csproj", "{D3DD6F33-107B-4BA5-8FB9-44416F9B88DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B6AC1FE4-B19B-4733-B775-7EAEA240A00D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

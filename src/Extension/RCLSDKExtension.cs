@@ -8,7 +8,7 @@ namespace RCL.SSL.SDK
         {
             services.AddTransient<IAuthTokenService, AuthTokenService>();
             services.AddTransient<ICertificateRequestService, CertificateRequestService>();
-            services.Configure(setupAction);
+            services.Configure<RCLSDKOptions>(setupAction);
 
             return services;
         }

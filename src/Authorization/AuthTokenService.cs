@@ -22,10 +22,21 @@ namespace RCL.SSL.SDK
 
         public async Task<AuthToken> GetAuthTokenAsync(string resource)
         {
-            AuthToken authToken = new AuthToken();
-
             try
             {
+                if (string.IsNullOrEmpty(_authOptions?.Value?.ClientId ?? string.Empty))
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name}  : Client Id is null or empty, cannot generate access token");
+                }
+                if (string.IsNullOrEmpty(_authOptions?.Value?.ClientSecret ?? string.Empty))
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name} : Client Secret is null or empty, cannot generate access token");
+                }
+                if (string.IsNullOrEmpty(_authOptions?.Value?.TenantId ?? string.Empty))
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name} : Tenant Id is null or empty, cannot generate access token");
+                }
+
                 var formcontent = new List<KeyValuePair<string, string>>();
                 formcontent.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
                 formcontent.Add(new KeyValuePair<string, string>("client_id", _authOptions.Value.ClientId));
@@ -42,19 +53,18 @@ namespace RCL.SSL.SDK
 
                 if (response.IsSuccessStatusCode)
                 {
-                    authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
+                    AuthToken authToken = JsonSerializer.Deserialize<AuthToken>(jstr);
+                    return authToken;
                 }
                 else
                 {
-                    throw new Exception($"Could not obtain Access Token. {jstr}");
+                    throw new Exception($"ERROR from {this.GetType().Name} : Could not obtain Access Token. {jstr}");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Access Token Error : {ex.Message}");
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
-
-            return authToken;
         }
     }
 }

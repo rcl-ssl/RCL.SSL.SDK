@@ -9,7 +9,7 @@ namespace RCL.SSL.SDK
         private readonly IAuthTokenService _authTokenService;
 
         public CertificateRequestService(IAuthTokenService authTokenService,
-            IOptions<RCLSDKOptions> options) 
+            IOptions<RCLSDKOptions> options)
             : base(options)
         {
             _authTokenService = authTokenService;
@@ -17,78 +17,130 @@ namespace RCL.SSL.SDK
 
         public async Task GetTestAsync()
         {
-            string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-
-            ResourceRequest resourceRequest = new ResourceRequest
+            try
             {
-                accessToken = accessToken
-            };
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
 
-            string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/test";
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/test";
 
-            await TestAsync<ResourceRequest>(uri, resourceRequest);
-
+                await TestAsync<ResourceRequest>(uri, resourceRequest);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
         }
 
         public async Task<Certificate> GetCertificateAsync(Certificate certificate)
         {
-            string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-            string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-            CertificateRequest certificateRequest = new CertificateRequest
+            try
             {
-                accessToken = accessToken,
-                accessTokenKeyVault = accessTokenKeyVault,
-                certificate = certificate
-            };
+                CertificateRequest certificateRequest = await GetCertificateRequestAsync(certificate);
 
-            string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate";
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate";
 
-            Certificate _certificate = await PostAsync<CertificateRequest, Certificate>(uri, certificateRequest);
+                Certificate _certificate = await PostAsync<CertificateRequest, Certificate>(uri, certificateRequest);
 
-            return _certificate;
+                return _certificate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
         }
 
         public async Task<List<Certificate>> GetCertificatesToRenewAsync()
         {
-            string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-            string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-            ResourceRequest resourceRequest = new ResourceRequest
+            try
             {
-                accessToken = accessToken,
-                accessTokenKeyVault = accessTokenKeyVault,
-            };
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
 
-            string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew/getlist";
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew/getlist";
 
-            List<Certificate> certificates = await PostAsync<ResourceRequest,List<Certificate>>(uri,resourceRequest);
+                List<Certificate> certificates = await PostAsync<ResourceRequest, List<Certificate>>(uri, resourceRequest);
 
-            return certificates;
+                return certificates;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
         }
 
         public async Task RenewCertificateAsync(Certificate certificate)
         {
-            string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
-            string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
-
-            CertificateRequest certificateRequest = new CertificateRequest
+            try
             {
-                accessToken = accessToken,
-                accessTokenKeyVault = accessTokenKeyVault,
-                certificate = certificate
-            };
+                CertificateRequest certificateRequest = await GetCertificateRequestAsync(certificate);
 
-            string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew";
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/public/certificate/renew";
 
-            await PostAsync<CertificateRequest>(uri, certificateRequest);
-
+                await PostAsync<CertificateRequest>(uri, certificateRequest);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
         }
 
         private async Task<string> GetAccessToken(string resource)
         {
-            AuthToken authToken = await _authTokenService.GetAuthTokenAsync(resource);
-            return authToken.access_token;
+            try
+            {
+                AuthToken authToken = await _authTokenService.GetAuthTokenAsync(resource);
+                return authToken.access_token;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
+        }
+
+        private async Task<ResourceRequest> GetResourceRequestAsync()
+        {
+            try
+            {
+                string accessToken = await GetAccessToken(Constants.AzureResourceManagerResource);
+                string accessTokenKeyVault = await GetAccessToken(Constants.AzureKeyVaultResource);
+
+                if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(accessTokenKeyVault))
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name} : Cannot get an access token");
+                }
+
+                ResourceRequest resourceRequest = new ResourceRequest
+                {
+                    accessToken = accessToken,
+                    accessTokenKeyVault = accessTokenKeyVault,
+                };
+
+                return resourceRequest;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : Could not get Resource Request, {ex.Message}");
+            }
+        }
+
+        private async Task<CertificateRequest> GetCertificateRequestAsync(Certificate certificate)
+        {
+            try
+            {
+                ResourceRequest resourceRequest = await GetResourceRequestAsync();
+
+                CertificateRequest certificateRequest = new CertificateRequest
+                {
+                    accessToken = resourceRequest.accessToken,
+                    accessTokenKeyVault = resourceRequest.accessTokenKeyVault,
+                    certificate = certificate
+                };
+
+                return certificateRequest;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : Could not get Certificate Request, {ex.Message}");
+            }
         }
     }
 }

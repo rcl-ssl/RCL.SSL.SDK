@@ -37,5 +37,6 @@ namespace RCL.SSL.SDK
         public string certCrtUrl { get; set; }
         public string cabundleCrtUrl { get; set; }
         public string fullchainCrtUrl { get; set; }
+
     }
 }

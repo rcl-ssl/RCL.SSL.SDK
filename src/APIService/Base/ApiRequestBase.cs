@@ -38,12 +38,12 @@ namespace RCL.SSL.SDK
                 }
                 else
                 {
-                    throw new Exception($"{response.StatusCode} : {content}");
+                    throw new Exception($"ERROR from {this.GetType().Name} : {response.StatusCode} : {content}");
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
             }
         }
 
@@ -66,7 +66,7 @@ namespace RCL.SSL.SDK
                 }
                 else
                 {
-                    throw new Exception($"{response.StatusCode} : {content}");
+                    throw new Exception($"ERROR from {this.GetType().Name} : {response.StatusCode} : {content}");
                 }
             }
             catch (Exception ex)
@@ -94,15 +94,15 @@ namespace RCL.SSL.SDK
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        throw new Exception($"The API Endpoint is Not Found. Please check the API Endpoint configuration.");
+                        throw new Exception($"ERROR from {this.GetType().Name} : The API Endpoint is Not Found. Please check the API Endpoint configuration.");
                     }
                     else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        throw new Exception($"The request is Unauthorized. Please check the configuration for the auth credentials. Also, check the configuration for the SubscriptionId.");
+                        throw new Exception($"ERROR from {this.GetType().Name} : The request is Unauthorized. Please check the configuration for the auth credentials. Also, check the configuration for the SubscriptionId.");
                     }
                     else
                     {
-                        throw new Exception($"{response.StatusCode} : {content}");
+                        throw new Exception($"ERROR from {this.GetType().Name} : {response.StatusCode} : {content}");
                     }
                 }
             }
