@@ -47,6 +47,32 @@ namespace RCL.SSL.SDK
             }
         }
 
+        public async Task<TResult> GetAsync<TResult>(string uri)
+            where TResult : new()
+        {
+            try
+            {
+                SetClientHeaders();
+                var response = await _client.GetAsync($"{_options.Value.ApiBaseUrl}/{uri}");
+
+                string content = ResolveContent(await response.Content.ReadAsStringAsync());
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TResult obj = JsonSerializer.Deserialize<TResult>(content);
+                    return obj;
+                }
+                else
+                {
+                    throw new Exception($"ERROR from {this.GetType().Name} : {response.StatusCode} : {content}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<TResult> PostAsync<T, TResult>(string uri, T payload)
             where TResult : new()
             where T : class
@@ -135,6 +161,10 @@ namespace RCL.SSL.SDK
         {
             _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.TryAddWithoutValidation("RCL-Source", _options.Value.SourceApplication);
+            if(!string.IsNullOrEmpty(_options?.Value?.ApiKey))
+            {
+                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _options.Value.ApiKey);
+            }
         }
     }
 }

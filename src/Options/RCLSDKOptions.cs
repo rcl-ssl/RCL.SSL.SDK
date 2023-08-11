@@ -9,6 +9,7 @@ namespace RCL.SSL.SDK
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string TenantId { get; set; }
+        public string ApiKey { get; set; }
         public string ApiBaseUrl { get; set; }
         public string SubscriptionId { get; set; }
         public string SourceApplication { get; set; }

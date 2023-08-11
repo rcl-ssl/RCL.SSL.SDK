@@ -49,6 +49,54 @@ namespace RCL.SSL.SDK
             }
         }
 
+        public async Task<Certificate> GetCertificateCoreAsync(string certificateName)
+        {
+            try
+            {
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/core/certificate/{certificateName}";
+
+                Certificate _certificate = await GetAsync<Certificate>(uri);
+
+                return _certificate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
+        }
+
+        public async Task<Order> GetCertificateOrderCoreAsync(string certificateName)
+        {
+            try
+            {
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/core/certificate/{certificateName}/order";
+
+                Order _order = await GetAsync<Order>(uri);
+
+                return _order;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
+        }
+
+        public async Task<Certificate> GetCertificateFinalizeOrderCoreAsync(string certificateName, string orderuri)
+        {
+            try
+            {
+                string uri = $"v1/subscription/{_options.Value.SubscriptionId}/core/certificate/{certificateName}/finalize?orderuri={orderuri}";
+
+                Certificate _certificate = await GetAsync<Certificate>(uri);
+
+                return _certificate;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"ERROR from {this.GetType().Name} : {ex.Message}");
+            }
+        }
+
         public async Task<List<Certificate>> GetCertificatesToRenewAsync()
         {
             try

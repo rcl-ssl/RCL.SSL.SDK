@@ -48,6 +48,51 @@ namespace RCL.SSL.SDK.Test
         }
 
         [TestMethod]
+        public async Task CertificateCoreTest()
+        {
+            try
+            {
+                Certificate _certificate = await _certificateRequestService.GetCertificateCoreAsync("shopeneur.com");
+                Assert.AreNotEqual(string.Empty, _certificate?.certificateName ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public async Task CertificateOrderCoreTest()
+        {
+            try
+            {
+                Order _order = await _certificateRequestService.GetCertificateOrderCoreAsync("shopeneur.com");
+                Assert.AreNotEqual(string.Empty, _order?.status ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public async Task CertificateFinalizeOrderCoreTest()
+        {
+            try
+            {
+                Certificate _certificate = await _certificateRequestService.GetCertificateFinalizeOrderCoreAsync("shopeneur.com", "https://acme-staging-v02.api.letsencrypt.org/acme/order/114111834/10239929564");
+                Assert.AreNotEqual(string.Empty, _certificate?.certificateName ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
         public async Task CertificateRenewGetListTest()
         {
             try
